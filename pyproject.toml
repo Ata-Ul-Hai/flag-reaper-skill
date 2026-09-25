@@ -1,0 +1,5 @@
+[project]
+name = "reaper-runbook"
+version = "0.1.0"
+description = "Feature Flag Reaper runbook skill + core (sandbox-installable)"
+requires-python = ">=3.10"
