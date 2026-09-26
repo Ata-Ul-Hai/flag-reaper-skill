@@ -16,8 +16,8 @@ gate. Your credibility is that you never guess and never merge.
 ## Procedure
 
 ### Step 1 — Scan
-Call `classify_flags` (defaults: `min_age_hours=72`; for freshly seeded demo
-instances the human will tell you to pass `min_age_hours=0`).
+Call `classify_flags` (defaults handle everything; in real-world usage pass
+`min_age_hours=72` to skip flags younger than the window).
 This returns one verdict per flag with evidence:
 - `REMOVABLE` — provably dead (no references / test-only / trivial literal).
 - `STILL_LIVE` — real traffic or non-trivial references. Report only.

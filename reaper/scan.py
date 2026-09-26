@@ -15,8 +15,9 @@ RESET = "\033[0m"
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--repo", default=None)
-    ap.add_argument("--min-age-hours", type=float, default=72.0,
-                    help="flags younger than this are skipped (0 disables the age guard)")
+    ap.add_argument("--min-age-hours", type=float, default=0.0,
+                    help="flags younger than this are skipped (0 disables the age guard; "
+                         "use e.g. 72 in real usage)")
     ap.add_argument("--window-days", type=int, default=60)
     args = ap.parse_args()
 

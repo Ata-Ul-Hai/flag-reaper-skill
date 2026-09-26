@@ -23,7 +23,7 @@ def default_repo() -> str:
     return _DEFAULT_REPO
 
 
-def scan(repo: str | None = None, min_age_hours: float = 72.0,
+def scan(repo: str | None = None, min_age_hours: float = 0.0,
          window_days: int = 60) -> dict:
     repo = repo or default_repo()
     audit.log("agent", "scan_started", {"repo": repo, "min_age_hours": min_age_hours,

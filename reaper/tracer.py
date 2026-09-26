@@ -19,10 +19,34 @@ EXCLUDE_GLOBS = [
 ]
 
 
+_RG_CANDIDATES = (
+    "/opt/homebrew/bin/rg",   # apple silicon brew
+    "/usr/local/bin/rg",      # intel brew
+    "/usr/bin/rg",
+)
+
+
+def _rg_path() -> str:
+    """Locate ripgrep robustly: env override → PATH → known install paths.
+
+    The MCP server process may run with a minimal PATH (launched headless by
+    an agent harness), so PATH-only lookup is not enough for demo reliability.
+    """
+    override = os.environ.get("REAPER_RG_PATH")
+    if override and os.path.exists(override):
+        return override
+    found = shutil.which("rg")
+    if found:
+        return found
+    for candidate in _RG_CANDIDATES:
+        if os.path.exists(candidate):
+            return candidate
+    raise RuntimeError("ripgrep (rg) is required: brew install ripgrep "
+                       "(or set REAPER_RG_PATH)")
+
+
 def _ripgrep(repo: str, pattern: str, fixed: bool = True, word: bool = True) -> list[dict]:
-    if shutil.which("rg") is None:
-        raise RuntimeError("ripgrep (rg) is required: brew install ripgrep")
-    cmd = ["rg", "-n", "--no-heading", "-S", *EXCLUDE_GLOBS]
+    cmd = [_rg_path(), "-n", "--no-heading", "-S", *EXCLUDE_GLOBS]
     if fixed:
         cmd.append("-F")
     if word:
