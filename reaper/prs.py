@@ -54,7 +54,7 @@ def open_pr(flag_key: str, verdict: dict, diff: str, test_output: str,
     repo = gh.get_repo(REPO_SLUG)
     body = _pr_body(flag_key, verdict, test_output, last_seen_at, last_hour_count, plan_only)
     pr = repo.create_pull(title=f"reaper: remove feature flag `{flag_key}`",
-                          body=body, head=branch, base="main")
+                          body=body, head=branch, base=repo.default_branch)
     result = {"pr_url": pr.html_url, "branch": branch, "number": pr.number}
     audit.log("agent", "pr_opened", {"flag": flag_key, **result, "plan_only": plan_only})
     return result

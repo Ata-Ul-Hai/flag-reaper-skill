@@ -16,6 +16,17 @@ import shutil
 import tempfile
 from pathlib import Path
 
+# Load .env from the project root before core imports (prs.py reads GitHub
+# credentials from the environment at import time). Existing env wins.
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent
+_ENV_FILE = _PROJECT_ROOT / ".env"
+if _ENV_FILE.exists():
+    for _line in _ENV_FILE.read_text().splitlines():
+        _line = _line.strip()
+        if _line and not _line.startswith("#") and "=" in _line:
+            _k, _v = _line.split("=", 1)
+            os.environ.setdefault(_k.strip(), _v.strip().strip("\"'"))
+
 from fastmcp import FastMCP
 from starlette.responses import JSONResponse
 
